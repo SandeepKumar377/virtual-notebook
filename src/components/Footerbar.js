@@ -1,10 +1,26 @@
 import React from 'react'
 
-const Footerbar=()=> {
+const Footerbar = () => {
     return (
-        <div>
-            <h1>This is footer</h1>
-        </div>
+        <table class="table table-dark table-borderless text-center">
+            <tbody>
+                <tr>
+                    <td>Home</td>
+                    <td>Footer</td>
+                    <td>Privacy Policy</td>
+                </tr>
+                <tr>
+                    <td>About</td>
+                    <td>Footer</td>
+                    <td>Contact</td>
+                </tr>
+                <tr>
+                    <td>About</td>
+                    <td>Footer</td>
+                    <td>Address</td>
+                </tr>
+            </tbody>
+        </table>
     )
 }
 

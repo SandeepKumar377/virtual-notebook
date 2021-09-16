@@ -8,23 +8,26 @@ import {
 import Navbar from './components/Navbar';
 import Footerbar from './components/Footerbar';
 import About from './components/About';
+import NoteState from './context/notes/NoteState';
 
 function App() {
   return (
-    <div className="App">
-      <Router>
-        <Navbar />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/about">
-            <About/>
-          </Route>
-        </Switch>
-      </Router>
-      <Footerbar />
-    </div>
+    <>
+      <NoteState>
+        <Router>
+          <Navbar />
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route exact path="/about">
+              <About />
+            </Route>
+          </Switch>
+        </Router>
+        <Footerbar />
+      </NoteState>
+    </>
   );
 }
 
