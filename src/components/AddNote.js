@@ -30,10 +30,6 @@ const AddNote = () => {
                     <label className="form-label">Tag</label>
                     <input type="text" className="form-control" onChange={addNoteOnChange} id="tag" name="tag" />
                 </div>
-                <div className="mb-3 form-check">
-                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                    <label className="form-check-label">Check me out</label>
-                </div>
                 <button type="submit" className="btn btn-primary" onClick={addNotefuncton}>Add note</button>
             </form>
         </div>
