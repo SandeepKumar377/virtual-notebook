@@ -2,7 +2,7 @@ import React from "react";
 
 const Alert = () => {
     return (
-        <div class="alert alert-danger" role="alert">
+        <div className="alert alert-danger" role="alert">
             Thsi is alert component....!
         </div>
     )
