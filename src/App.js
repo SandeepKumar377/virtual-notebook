@@ -24,8 +24,8 @@ function App() {
               <About />
             </Route>
           </Switch>
-        </Router>
-        <Footerbar />
+          <Footerbar />
+        </Router>       
       </NoteState>
     </>
   );

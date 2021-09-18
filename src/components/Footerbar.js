@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footerbar = () => {
     return (
-        <table class="table table-dark table-borderless text-center">
+        <table className="table table-dark table-borderless text-center m-0">
             <tbody>
                 <tr>
                     <td>Home</td>
