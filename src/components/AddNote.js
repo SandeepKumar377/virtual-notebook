@@ -9,10 +9,12 @@ const AddNote = () => {
     const addNotefuncton=(e)=>{
         e.preventDefault();    //This function use for "not reload page"
         addNote(note.title, note.description, note.tag);
+        setNote({title:"",description:"", tag:""})
     }
     const addNoteOnChange=(e)=>{
         setNote({...note, [e.target.name]: e.target.value})
     }
+
     return (
 
         <div className="container">
@@ -20,17 +22,17 @@ const AddNote = () => {
             <form className="my-5">
                 <div className="mb-3">
                     <label className="form-label">Title</label>
-                    <input type="text" className="form-control" onChange={addNoteOnChange} id="title" name="title" />
+                    <input type="text" className="form-control" value={note.title} onChange={addNoteOnChange} id="title" name="title" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Description</label>
-                    <input type="text" className="form-control" onChange={addNoteOnChange} id="description" name="description" />
+                    <input type="text" className="form-control" value={note.description} onChange={addNoteOnChange} id="description" name="description" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Tag</label>
-                    <input type="text" className="form-control" onChange={addNoteOnChange} id="tag" name="tag" />
+                    <input type="text" className="form-control" value={note.tag} onChange={addNoteOnChange} id="tag" name="tag" />
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={addNotefuncton}>Add note</button>
+                <button type="submit" disabled={note.title.length<5 || note.description.length<5 } className="mx-3 btn btn-primary" onClick={addNotefuncton}>Add note</button>
             </form>
         </div>
 

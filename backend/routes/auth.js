@@ -3,8 +3,8 @@ const User = require('../models/User');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-let jwt = require('jsonwebtoken');
-let fetchuser = require('../middleware/fetchuser');
+var jwt = require('jsonwebtoken');
+var fetchuser = require('../middleware/fetchuser');
 
 // const { route } = require('./notes');
 
@@ -13,17 +13,18 @@ const JWT_SECRET = 'sandeepkumar$sk';
 router.post('/createuser', [
     body('name', 'Enter valid name').isLength({ min: 3 }),
     body('email', 'Enter valid email!').isEmail(),
-    body('password').isLength({ min: 5 }),
+    body('password', 'Password must be atleast 5 characters!').isLength({ min: 5 }),
 ], async (req, res) => {
+    let success=false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success, errors: errors.array() });
     }
     // check user email exist or not
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ error: "User already exist with this email!" })
+            return res.status(400).json({ success, error: "User already exist with this email!" })
         }
         const salt = await bcrypt.genSalt(10);
         const hashPassword = await bcrypt.hash(req.body.password, salt);
@@ -38,7 +39,8 @@ router.post('/createuser', [
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json({ authtoken })
+        success=true;
+        res.json({ success, authtoken })
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal servar error!");
@@ -50,6 +52,7 @@ router.post('/login', [
     body('email', 'Enter valid email!').isEmail(),
     body('password', 'Password is required').exists(),
 ], async (req, res) => {
+    let success=false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -58,11 +61,13 @@ router.post('/login', [
     try {
         let user = await User.findOne({ email });
         if (!user) {
+            success=false;
             return res.status(400).json({ error: "Please enter correct password and email!" });
         }
         const passwordCompare = await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
-            return res.status(400).json({ error: "Please enter correct password and email!" });
+            success=false;
+            return res.status(400).json({ success, error: "Please enter correct password and email!" });
         }
         const data = {
             user: {
@@ -70,7 +75,8 @@ router.post('/login', [
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json({ authtoken })
+        success=true;
+        res.json({ success, authtoken })
         console.log(authtoken)
     } catch (error) {
         console.error(error.message);

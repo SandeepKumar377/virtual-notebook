@@ -1,7 +1,6 @@
 import NoteContext from "./noteContext";
 import { useState } from "react";
 
-
 const NoteState = (props) => {
   const baseApiURL = "http://localhost:5000"
   const notesInitial = []
@@ -18,9 +17,9 @@ const NoteState = (props) => {
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0MDZkYmYxMTI3YjUyYTQ3ZjU3ZmUzIn0sImlhdCI6MTYzMTYyODIzNH0.GOJxgEr0iPRS6e0ME5jKt65gwoISplXvFqfYEFw2mOc'
       }
     });
-    const notes= await response.json()
+    const notes = await response.json()
     setNotes(notes)
-   }
+  }
 
   // Add Note function
   const addNote = async (title, description, tag) => {
@@ -32,41 +31,35 @@ const NoteState = (props) => {
         'content-type': 'application/json',
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0MDZkYmYxMTI3YjUyYTQ3ZjU3ZmUzIn0sImlhdCI6MTYzMTYyODIzNH0.GOJxgEr0iPRS6e0ME5jKt65gwoISplXvFqfYEFw2mOc'
       },
-      body: JSON.stringify({title, description, tag})
+      body: JSON.stringify({ title, description, tag })
     });
-    alert(response)
-    const note = {
-      "_id": "6141e475f5a8bfff4220b1e4tw",
-      "user": "61406dbf1127b52a47f57fe3",
-      "title": title,
-      "description": description,
-      "tag": tag,
-      "date": "2021-09-15T12:17:57.309Z",
-      "__v": 0
-    };
+    const note = await response.json()
     setNotes(notes.concat(note))
-
   }
+
   // Delete Notes function
   const deleteNote = async (id) => {
-     //API call
-     let url = `${baseApiURL}/api/notes/deletenote/${id}`
-     const response = await fetch(url, {
-       method: 'DELETE',
-       headers: {
-         'content-type': 'application/json',
-         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0MDZkYmYxMTI3YjUyYTQ3ZjU3ZmUzIn0sImlhdCI6MTYzMTYyODIzNH0.GOJxgEr0iPRS6e0ME5jKt65gwoISplXvFqfYEFw2mOc'
-       }
-     });
-     const json= response.json();
-    console.log(json);
-    console.log("Note delete");
-    alert("Note delete");
-    const newNotes = notes.filter((note) => { return note._id !== id })
-    setNotes(newNotes)
+    //API call
+    let url = `${baseApiURL}/api/notes/deletenote/${id}`
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0MDZkYmYxMTI3YjUyYTQ3ZjU3ZmUzIn0sImlhdCI6MTYzMTYyODIzNH0.GOJxgEr0iPRS6e0ME5jKt65gwoISplXvFqfYEFw2mOc'
+      }
+    });
+    // const json = response.json();
+    // console.log(json);
+    if (response) {
+      const newNotes = notes.filter((note) => { return note._id !== id })
+      setNotes(newNotes)
+    } else {
+      alert("Internal server erro!")
+    }
+
 
   }
-  // Edit Notes function
+  // Update Notes function
   const editNote = async (id, title, description, tag) => {
     //API call
     let url = `${baseApiURL}/api/notes/updatenote/${id}`
@@ -76,26 +69,26 @@ const NoteState = (props) => {
         'content-type': 'application/json',
         'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE0MDZkYmYxMTI3YjUyYTQ3ZjU3ZmUzIn0sImlhdCI6MTYzMTYyODIzNH0.GOJxgEr0iPRS6e0ME5jKt65gwoISplXvFqfYEFw2mOc'
       },
-      body: JSON.stringify({title, description, tag})
+      body: JSON.stringify({ title, description, tag })
     });
-    const res = await response.json();
-    console.log(res)
-
-    let newNote = JSON.parse(JSON.stringify(notes))
-
-    for (let index = 0; index < newNote.length; index++) {
-      const element = newNote[index];
-      if (element._id === id) {
-        // newNote[index].title = title;
-        // newNote[index].description = description;
-        // newNote[index].tag = tag;
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
-        break;
+    if (response.status === 200) {
+      let newNote = JSON.parse(JSON.stringify(notes))
+      for (let index = 0; index < newNote.length; index++) {
+        const element = newNote[index];
+        if (element._id === id) {
+          element.title = title;
+          element.description = description;
+          element.tag = tag;
+          break;
+        }
       }
-    }    
-    setNotes(newNote);
+      setNotes(newNote);
+    }
+    else{
+      alert("Internal server error!")
+      return null;
+    }
+
   }
 
   return (
@@ -104,6 +97,5 @@ const NoteState = (props) => {
     </NoteContext.Provider>
   )
 }
-
 
 export default NoteState;
