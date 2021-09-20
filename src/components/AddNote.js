@@ -19,7 +19,7 @@ const AddNote = () => {
 
         <div className="container">
             <h2>Add Notes</h2>
-            <form className="my-5">
+            <form className="mb-3">
                 <div className="mb-3">
                     <label className="form-label">Title</label>
                     <input type="text" className="form-control" value={note.title} onChange={addNoteOnChange} id="title" name="title" />
@@ -32,7 +32,7 @@ const AddNote = () => {
                     <label className="form-label">Tag</label>
                     <input type="text" className="form-control" value={note.tag} onChange={addNoteOnChange} id="tag" name="tag" />
                 </div>
-                <button type="submit" disabled={note.title.length<5 || note.description.length<5 } className="mx-3 btn btn-primary" onClick={addNotefuncton}>Add note</button>
+                <button type="submit" disabled={note.title.length<5 || note.description.length<5 } className="btn btn-primary" onClick={addNotefuncton}>Add note</button>
             </form>
         </div>
 

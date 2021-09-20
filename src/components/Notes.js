@@ -1,14 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useHistory } from 'react-router';
 import noteContext from "../context/notes/noteContext";
 import AddNote from './AddNote';
 import NoteItem from './NoteItem';
 
-const Notes = () => {
-
+const Notes = (props) => {
     const context = useContext(noteContext);
+    let history = useHistory();
     const { notes, getNotes, editNote } = context;
     useEffect(() => {
-        getNotes()
+        if (localStorage.getItem('token')) {
+            getNotes()            
+        } else {
+            history.push("/login")            
+        }
         // eslint-disable-next-line
     }, [])
     const ref = useRef(null)
@@ -18,11 +23,13 @@ const Notes = () => {
     const updateNote = (currentNote) => {
         ref.current.click()
         setNote({ id: currentNote._id, updateTitle: currentNote.title, updateDescription: currentNote.description, updateTag: currentNote.tag })
+        
     }
 
     const addNotefuncton = (e) => {
         editNote(note.id, note.updateTitle, note.updateDescription, note.updateTag)
         refClose.current.click();
+        props.showAlert("Updated successfully", "success");
     }
     const addNoteOnChange = (e) => {
         setNote({ ...note, [e.target.name]: e.target.value })
@@ -30,7 +37,7 @@ const Notes = () => {
 
     return (
         <>
-            <AddNote />
+            <AddNote showAlert={props.showAlert} />
             <button type="button" ref={ref} className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Update Note
             </button>
@@ -72,7 +79,7 @@ const Notes = () => {
                 {notes.length===0 && 'You have no notes!'}
                 </div>
                 {notes.map((note) => {
-                    return <NoteItem key={note._id} updateNote={updateNote} note={note} />
+                    return <NoteItem key={note._id} showAlert={props.showAlert} updateNote={updateNote} note={note} />
                 })}
             </div>
         </>
